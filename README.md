@@ -23,13 +23,19 @@ Proyek ini berangkat dari masalah nyata di departemen shipping. Kami menyelesaik
 
 ## Anggota Kelompok
 
-| No | Nama | NIM | Peran |
-|----|------|-----|-------|
-| 1 | Augustian Gautama | 2023131006 | Project Manager |
-| 2 | [NAMA] | [NIM] | [PERAN] |
-| 3 | [NAMA] | [NIM] | [PERAN] |
-| 4 | [NAMA] | [NIM] | [PERAN] |
-| 5 | [NAMA] | [NIM] | [PERAN] |
+| No | Nama | NIM |
+|----|------|-----|
+| 1 | Andrean | 2025122034 |
+| 2 | Augustian Gautama | 2023131006 |
+| 3 | Sanni Oktavia | 2023131008 |
+| 4 | Canniago Verrian | 2023131012 |
+| 5 | Ferry Govert Anwar | 2023131019 |
+| 6 | Jeselyn | 2025122004 |
+| 7 | Leonis Leonaneta | 2025122021 |
+| 8 | Junifer Tan Singbee | 2025122042 |
+| 9 | Evelyn Itan | 2025122053 |
+| 10 | Runa | 2025122057 |
+| 11 | Michelle | 2025122062 |
 
 **Mata Kuliah:** [NAMA MATA KULIAH]
 **Dosen Pengampu:** Yodi
