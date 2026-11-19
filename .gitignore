@@ -11,6 +11,7 @@ config.local.*
 *.xlsx
 !app/po_template.xlsx
 !app/di_template.xlsx
+!docs/sample/contoh-data-dockit.xlsx
 *.xls
 *.xlsm
 *.pdf

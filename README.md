@@ -107,7 +107,10 @@ Satu salah ketik pada nomor kontainer, nomor seal, atau CBM membuat dokumen haru
 ```
 litek-kelomok-5/
 ├── README.md
-├── docs/
+├── docs/                            # Dockit Web (GitHub Pages)
+│   ├── index.html
+│   ├── assets/                      # app.js, style.css, font, library (SheetJS, JSZip)
+│   ├── sample/contoh-data-dockit.xlsx   # Data contoh fiktif
 │   └── design-thinking-canvas.png   # Hasil Design Thinking Canvas
 └── app/                             # Source code Dockit V1.28
     ├── dockit.pyw                   # Aplikasi utama (convert Excel → PDF)
@@ -124,6 +127,25 @@ litek-kelomok-5/
 ```
 
 > **Catatan:** semua data perusahaan, customer, alamat, email dan rekening di kedua template sudah diganti dengan data contoh fiktif.
+
+---
+
+## Dockit Web
+
+**Coba langsung:** https://augustian17.github.io/litek-kelomok-5/
+
+Versi browser Dockit untuk tim shipping, di-hosting gratis di GitHub Pages (folder `docs/`).
+
+- **Login khusus karyawan** dengan animasi pembuka kapal kontainer (desain glassmorphism).
+- **Tambah File:** tarik file master DI, file loading, dan file data barang (Excel atau ZIP). Tersedia tombol *Coba dengan data contoh*.
+- **Cek Data:** mendeteksi Rolling, Kontainer, atau Seal yang dobel, kolom wajib kosong, NW/GW atau HS Code yang belum ada, CBM/Qty yang tidak tally, serta anomali berat (GW/CBM) dibanding kontainer seukuran.
+- **Asisten AI:** ringkasan lokal (BL yang perlu direvisi, CBM per bulan, kontainer per POD). Untuk pertanyaan bebas, pengguna bisa memasukkan API key Claude miliknya sendiri.
+- **Dokumen CI/PL:** preview Commercial Invoice dan Packing List, lalu unduh sebagai PDF atau Excel.
+- **Kalender ETD:** setiap BL tampil di hari berangkat (H-1) dan hari ETD, diwarnai per POD.
+
+**Privasi:** semua file diproses di browser dan tidak pernah dikirim ke server. Pengecualiannya hanya Asisten AI, dan itu pun hanya bila pengguna memasukkan API key Claude.
+
+> **Mode demo:** login saat ini dicek di browser (akun `demo@dockit.app` / `Dockit2026!`). Ini **bukan** pengamanan sungguhan karena kodenya publik. Untuk dipakai sungguhan, login perlu dihubungkan ke layanan seperti Firebase Authentication atau Supabase Auth.
 
 ---
 
@@ -146,7 +168,9 @@ pythonw app/dockit.pyw
 
 - [x] Design Thinking Canvas
 - [x] Prototype Dockit V1.28 (generate CI/PL, export PDF, validasi data, kalender ETD)
-- [ ] Wireframe / mockup antarmuka Dockit
+- [x] Wireframe / mockup antarmuka Dockit Web
+- [x] Dockit Web 1.0 di GitHub Pages (mode demo)
+- [ ] Login sungguhan (Firebase / Supabase)
 - [ ] Prototype fitur deteksi anomali berbasis AI
 - [ ] Pengujian dengan pengguna (staf shipping)
 - [ ] Presentasi hasil
