@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Rahasia & konfigurasi lokal
+.env
+*.key
+config.local.*
+
+# Data pengiriman asli: jangan di-commit ke repo publik
+*.xlsx
+!app/po_template.xlsx
+!app/di_template.xlsx
+*.xls
+*.xlsm
+*.pdf
+
+# OS
+Thumbs.db
+.DS_Store

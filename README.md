@@ -79,7 +79,9 @@ Satu salah ketik pada nomor kontainer, nomor seal, atau CBM membuat dokumen haru
 - **Penyusunan dokumen otomatis.** Menarik data dari banyak file Excel (PO & DI) dan mengisi template CI/PL.
 - **Validasi data.** Mendeteksi duplikat container number, seal number, dan rolling number.
 - **Aturan bisnis bawaan.** CBM selalu dibulatkan ke bawah, dan tanggal keberangkatan dihitung H-1 dari ETD.
-- **Export PDF massal.** Mengubah banyak sheet terpilih dari banyak file menjadi PDF sekaligus.
+- **Export PDF massal.** Mengubah banyak sheet terpilih dari banyak file (termasuk ZIP) menjadi PDF sekaligus, lengkap dengan preview.
+- **Kalender ETD.** Menampilkan jadwal per BL (hari berangkat H-1 dan ETD), dikelompokkan per port of discharge.
+- **Update NW/GW.** Memperbarui berat bersih dan kotor dari file timbang, atau memperkirakannya bila belum ditimbang.
 - **Versioning.** Setiap update aplikasi diberi nomor versi baru.
 
 ---
@@ -99,8 +101,37 @@ Satu salah ketik pada nomor kontainer, nomor seal, atau CBM membuat dokumen haru
 ```
 litek-kelomok-5/
 ├── README.md
-└── docs/
-    └── design-thinking-canvas.png   # Hasil Design Thinking Canvas
+├── docs/
+│   └── design-thinking-canvas.png   # Hasil Design Thinking Canvas
+└── app/                             # Source code Dockit V1.28
+    ├── dockit.pyw                   # Aplikasi utama (convert Excel → PDF)
+    ├── di_ui.py                     # Halaman data DI & pembuat Excel
+    ├── di_data.py                   # Baca/simpan file sumber, pengecekan data
+    ├── calendar_page.py             # Kalender ETD per BL
+    ├── dockit_motion.py             # Animasi antarmuka
+    ├── dockit_icons.py              # Ikon (Lucide / Moving Icons, MIT)
+    ├── po_template.xlsx             # Template CI/PL PO (data contoh)
+    ├── di_template.xlsx             # Template CI/PL DI (data contoh)
+    ├── icons/                       # Aset ikon
+    ├── Install.bat / install.ps1    # Installer Windows
+    └── uninstall.ps1
+```
+
+> **Catatan:** semua data perusahaan, customer, alamat, email dan rekening di kedua template sudah diganti dengan data contoh fiktif.
+
+---
+
+## Menjalankan Dockit
+
+**Kebutuhan:** Windows, Python 3, dan Microsoft Excel atau WPS Spreadsheets.
+
+1. Buka folder `app/`.
+2. Jalankan **`Install.bat`**. Installer akan memasang dependensi (`pywin32`, `customtkinter`, `pypdfium2`, `pillow`, `lxml`, `tkinterdnd2`, `openpyxl`) dan membuat shortcut Dockit.
+3. Buka Dockit dari shortcut, atau jalankan langsung:
+
+```bash
+pip install pywin32 customtkinter pypdfium2 pillow lxml tkinterdnd2 openpyxl
+pythonw app/dockit.pyw
 ```
 
 ---
@@ -108,6 +139,7 @@ litek-kelomok-5/
 ## Rencana Pengembangan
 
 - [x] Design Thinking Canvas
+- [x] Prototype Dockit V1.28 (generate CI/PL, export PDF, validasi data, kalender ETD)
 - [ ] Wireframe / mockup antarmuka Dockit
 - [ ] Prototype fitur deteksi anomali berbasis AI
 - [ ] Pengujian dengan pengguna (staf shipping)
