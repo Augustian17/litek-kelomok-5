@@ -220,11 +220,11 @@ function rebuild() {
     if (!m.lines.length) issue(m, "err", hasLoading || all.prices.length ? "Tidak ada baris barang untuk DI ini" : "Belum ada file loading atau data barang", hasLoading ? "Cek sheet DI-柜 / HARGA" : "Tambahkan file loading dan file data barang");
     if (m.lines.length > MAX_ITEMS) issue(m, "err", `${m.lines.length} baris barang, template hanya muat ${MAX_ITEMS}`, "Pecah menjadi dua DI");
     if (m.lines.length && hasItems) {
-      const noW = m.lines.filter((l) => l.nw === null || l.gw === null).map((l) => l.sku);
+      const noW = m.lines.filter((l) => l.nw === null || l.gw === null).map((l) => l.sku).filter((v, i, a) => a.indexOf(v) === i);
       if (noW.length) issue(m, "warn", `NW/GW belum ada untuk ${noW.join(", ")}`, "Update dari file timbang");
-      const noHs = m.lines.filter((l) => blank(l.hs)).map((l) => l.sku);
+      const noHs = m.lines.filter((l) => blank(l.hs)).map((l) => l.sku).filter((v, i, a) => a.indexOf(v) === i);
       if (noHs.length) issue(m, "warn", `HS Code kosong untuk ${noHs.join(", ")}`, "Lengkapi di Sheet1");
-      const noPrice = m.lines.filter((l) => l.price === null).map((l) => l.sku);
+      const noPrice = m.lines.filter((l) => l.price === null).map((l) => l.sku).filter((v, i, a) => a.indexOf(v) === i);
       if (noPrice.length && all.prices.length) issue(m, "warn", `Harga belum ada untuk ${noPrice.join(", ")}`, "Lengkapi di tab HARGA");
       if (m.cbm !== null && m.totals.cbm && Math.abs(m.cbm - m.totals.cbm) > 0.005) issue(m, "warn", `CBM tidak tally: master ${fmt(m.cbm)}, hitungan ${fmt(m.totals.cbm)}`, "Samakan CBM di master atau data barang");
       if (m.qty !== null && m.totals.qty && m.qty !== m.totals.qty) issue(m, "warn", `Qty tidak tally: master ${fmt(m.qty, 0)}, loading ${fmt(m.totals.qty, 0)}`, "Cek qty di file loading");
