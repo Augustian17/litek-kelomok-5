@@ -232,3 +232,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
 details.card>summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
 details.card>summary::-webkit-details-marker{display:none}
 details.card[open]>summary{border-bottom:1px solid var(--line-2)}
+
+.banner{display:flex;gap:12px;align-items:flex-start;background:var(--warn-bg);color:#5C3209;border:1px solid #F1C793;border-radius:14px;padding:14px 18px;font-size:14.5px;line-height:1.5}
+.banner svg{flex:none;margin-top:2px;color:var(--warn)}
+.banner a{color:#5C3209;font-weight:700}

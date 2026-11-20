@@ -5,7 +5,7 @@
 "use strict";
 
 /* ---------- Konfigurasi ---------- */
-const VERSION = "1.0";
+const VERSION = "1.0.2";
 // MODE DEMO: login dicek di browser. Ini BUKAN pengamanan sungguhan (kode bisa dibaca siapa saja).
 // Untuk produksi, ganti dengan layanan login seperti Firebase Authentication atau Supabase Auth.
 const DEMO_USERS = [{ email: "demo@dockit.app", name: "Admin Shipping", hash: "0b453894bb8bc970de416f19c32700ddae45d0ffe687c83fd18bc111ab673e11" }];
@@ -338,6 +338,14 @@ function shell(route, body) {
     <main class="main" id="main">${body}</main></div>`;
 }
 
+
+function missingBanner() {
+  const d = S.data; if (!d || !d.rows.length) return "";
+  const miss = [!d.counts.loading && "file loading (sheet DI-柜)", !d.counts.items && "file data barang (Sheet1, MODEL -1 (2), HARGA)"].filter(Boolean);
+  if (!miss.length) return "";
+  return `<div class="banner" role="status">${I(ICON.alert, 20)}<div><b>Semua BL masih terkunci karena ${miss.join(" dan ")} belum dimuat.</b><br>Dokumen CI/PL butuh daftar barang, berat, dan harga. Tambahkan file tersebut di menu <a href="#/file">Tambah File</a>, atau upload ZIP yang berisi semua file.</div></div>`;
+}
+
 /* ---------- Halaman: Tambah File ---------- */
 function viewFiles() {
   const rows = S.files.map((f) => {
@@ -352,6 +360,7 @@ function viewFiles() {
   const conts = d ? new Set(d.rows.map((m) => ukey(m.cont)).filter(Boolean)).size : 0;
   return `<header class="head"><div><h1>Tambah file DI</h1><p>Masukkan file master DI, file loading, dan file data barang (Excel atau ZIP).</p></div>
       <a class="btn" href="#/cek" ${active ? "" : 'aria-disabled="true" tabindex="-1"'}>Cek data ${I(ICON.arrow, 18)}</a></header>
+    ${missingBanner()}
     <label class="drop" id="drop">
       <span class="ic">${I(`<g stroke="#0F2C59">${ICON.upload}</g>`, 26)}</span>
       <b>Tarik file ke sini, atau klik untuk memilih</b><span>.xlsx, .xls atau .zip · bisa banyak file sekaligus</span>
@@ -380,6 +389,7 @@ function viewCheck(focusAi) {
   return `<div class="row">
     <div style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
       <header class="head"><div><h1>Cek data</h1><p>Hasil pengecekan ${d.rows.length} DI sebelum dokumen dibuat. ${okCount} DI tanpa catatan.</p></div></header>
+      ${missingBanner()}
       <div class="chips" role="group" aria-label="Filter hasil">${chip("all", "all", "Semua", list.length)}${chip("err", "err", "Error", c.err)}${chip("warn", "warn", "Peringatan", c.warn)}${chip("ai", "ai", "Anomali", c.ai)}</div>
       <section class="card">${shown.length ? `<div class="scroll"><table class="tbl"><thead><tr><th>Jenis</th><th>BL / DI</th><th>Masalah</th><th>Saran</th></tr></thead><tbody>
         ${shown.map((x) => `<tr><td><span class="pill ${x.level}">${label[x.level]}</span></td><td class="num"><strong>${esc(x.m.bl || "–")}</strong><br><small>${esc(x.m.key)} · ${esc(x.m.file)} baris ${x.m.row}</small></td><td>${esc(x.text)}</td><td style="color:var(--ink-2)">${esc(x.hint || "")}</td></tr>`).join("")}
@@ -516,9 +526,10 @@ function viewDocs() {
   const okRows = d.rows.filter((m) => m.level !== "err");
   const allOn = okRows.length && okRows.every((m) => S.selected.has(m.key));
   const p = S.profile;
-  return `<header class="head"><div><h1>Dokumen CI/PL</h1><p>Pilih BL, cek preview, lalu unduh dokumennya.</p></div>
+  return `${""}<header class="head"><div><h1>Dokumen CI/PL</h1><p>Pilih BL, cek preview, lalu unduh dokumennya.</p></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" data-act="xlsx" ${sel.length ? "" : "disabled"}>${I(ICON.down, 18)}Excel</button>
       <button class="btn" data-act="pdf" ${sel.length ? "" : "disabled"}>${I(ICON.printer, 18)}PDF · ${sel.length} BL dipilih</button></div></header>
+    ${missingBanner()}
     <div class="row">
       <section class="card bl-list" aria-label="Daftar BL">
         <div class="card-h" style="padding:12px 18px"><label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700"><input type="checkbox" data-act="all" ${allOn ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--navy)">Pilih semua</label><span class="num" style="font-size:13px;color:var(--muted)">${sel.length} / ${d.rows.length}</span></div>
