@@ -37,7 +37,7 @@ Proyek ini berangkat dari masalah nyata di departemen shipping. Kami menyelesaik
 | 10 | Runa | 2025122057 |
 | 11 | Michelle | 2025122062 |
 
-**Mata Kuliah:** [NAMA MATA KULIAH]
+**Mata Kuliah:** Literasi Komputer
 **Dosen Pengampu:** Yodi
 **Universitas:** Universitas Universal, Batam
 
