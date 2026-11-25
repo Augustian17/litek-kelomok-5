@@ -22,7 +22,7 @@ import di_ui
 import dockit_icons as icons
 import dockit_motion as motion
 
-APP_VERSION = "1.28"
+APP_VERSION = "1.29"
 APP_TITLE = f"Dockit V{APP_VERSION}"
 APP_ID = f"Dockit.App.{APP_VERSION}"
 def asset_path(name):

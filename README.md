@@ -112,17 +112,20 @@ litek-kelomok-5/
 │   ├── assets/                      # app.js, style.css, font, library (SheetJS, JSZip)
 │   ├── sample/contoh-data-dockit.xlsx   # Data contoh fiktif
 │   └── design-thinking-canvas.png   # Hasil Design Thinking Canvas
-└── app/                             # Source code Dockit V1.28
+├── packaging/BACA-DULU.txt          # Panduan di dalam ZIP Dockit.exe
+├── .github/workflows/               # Build Dockit.exe otomatis (GitHub Actions)
+└── app/                             # Source code Dockit V1.29
     ├── dockit.pyw                   # Aplikasi utama (convert Excel → PDF)
     ├── di_ui.py                     # Halaman data DI & pembuat Excel
     ├── di_data.py                   # Baca/simpan file sumber, pengecekan data
+    ├── xlsx_rows.py                 # Tambah baris item di template tanpa merusak rumus
     ├── calendar_page.py             # Kalender ETD per BL
     ├── dockit_motion.py             # Animasi antarmuka
     ├── dockit_icons.py              # Ikon (Lucide / Moving Icons, MIT)
     ├── po_template.xlsx             # Template CI/PL PO (data contoh)
     ├── di_template.xlsx             # Template CI/PL DI (data contoh)
     ├── icons/                       # Aset ikon
-    ├── Install.bat / install.ps1    # Installer Windows
+    ├── Install.bat / install.ps1    # Installer dari source (butuh Python)
     └── uninstall.ps1
 ```
 
@@ -149,18 +152,22 @@ Versi browser Dockit untuk tim shipping, di-hosting gratis di GitHub Pages (fold
 
 ---
 
-## Menjalankan Dockit
+## Download Dockit (Windows)
 
-**Kebutuhan:** Windows, Python 3, dan Microsoft Excel atau WPS Spreadsheets.
+**Cara termudah, tanpa Python:**
 
-1. Buka folder `app/`.
-2. Jalankan **`Install.bat`**. Installer akan memasang dependensi (`pywin32`, `customtkinter`, `pypdfium2`, `pillow`, `lxml`, `tkinterdnd2`, `openpyxl`) dan membuat shortcut Dockit.
-3. Buka Dockit dari shortcut, atau jalankan langsung:
+1. Download **[Dockit-Windows.zip](https://github.com/Augustian17/litek-kelomok-5/releases/latest/download/Dockit-Windows.zip)** (selalu versi terbaru, lihat juga halaman [Releases](https://github.com/Augustian17/litek-kelomok-5/releases/latest)).
+2. Klik kanan ZIP, pilih **Extract All**, lalu jalankan **`Dockit.exe`**.
+3. Kalau muncul "Windows protected your PC", klik **More info** lalu **Run anyway** (aplikasi belum ditandatangani secara digital).
 
-```bash
-pip install pywin32 customtkinter pypdfium2 pillow lxml tkinterdnd2 openpyxl
-pythonw app/dockit.pyw
-```
+Kebutuhan: Windows 10/11 64-bit dan Microsoft Excel. File `.exe` dibangun otomatis oleh GitHub Actions setiap kali kode di `app/` diperbarui.
+
+**Alternatif, install dari source (butuh Python 3):**
+
+1. Download repo ini (**Code → Download ZIP**) dan ekstrak **semua** isinya.
+2. Buka folder `app/`, lalu jalankan **`Install.bat`**. Installer memasang library yang dibutuhkan dan membuat shortcut di Desktop dan Start Menu.
+
+> Template CI/PL di repo berisi data contoh fiktif. Untuk dipakai di kantor, ganti `po_template.xlsx` dan `di_template.xlsx` dengan template asli perusahaan.
 
 ---
 
@@ -168,6 +175,7 @@ pythonw app/dockit.pyw
 
 - [x] Design Thinking Canvas
 - [x] Prototype Dockit V1.28 (generate CI/PL, export PDF, validasi data, kalender ETD)
+- [x] Dockit V1.29 bisa di-download sebagai `.exe` untuk semua PC Windows
 - [x] Wireframe / mockup antarmuka Dockit Web
 - [x] Dockit Web 1.0 di GitHub Pages (mode demo)
 - [ ] Login sungguhan (Firebase / Supabase)

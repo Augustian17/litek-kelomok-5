@@ -1,4 +1,8 @@
 """Data DI PDF Gen: baca dan simpan file sumber, pengecekan, dan pembuatan Excel DI."""
+try:
+    from xlsx_rows import add_item_rows
+except ImportError:
+    from .xlsx_rows import add_item_rows
 import datetime
 import json
 import math
@@ -109,14 +113,14 @@ def _profiles():
     return {
         "DI": Profile(
             name="DI", prefix="DI-柜", table="master", sheet=MASTER_SHEET, first_row=3, max_column=None, template="di_template.xlsx",
-            formula_cells=MASTER_FORMULA_CELLS, max_items=19, code_key="F", qty_key="Q", bl_key="N", pod_key="M", year_key="D",
+            formula_cells=MASTER_FORMULA_CELLS, max_items=99, code_key="F", qty_key="Q", bl_key="N", pod_key="M", year_key="D",
             unique=[("D", "Rolling"), ("G", "Kontainer"), ("H", "Seal")],
             required={"C": "PO", "G": "Kontainer", "H": "Seal", "I": "Tgl", "J": "Size", "L": "ETD", "M": "POD", "N": "BL", "O": "Kapal"},
             columns=MASTER_COLUMNS, line_required=(("qty", "Qty"), ("asin", "ASIN"), ("po", "PO"), ("nw", "NW"), ("gw", "GW"), ("cbm", "CBM"), ("hs", "HS Code")),
         ),
         "PO": Profile(
             name="PO", prefix="PO-柜", table="po_master", sheet=MASTER_PO_SHEET, first_row=3, max_column=PO_LAST_COLUMN, template="po_template.xlsx",
-            formula_cells=PO_FORMULA_CELLS, max_items=21, code_key="B", qty_key="J", bl_key="F", pod_key="E", year_key="B",
+            formula_cells=PO_FORMULA_CELLS, max_items=99, code_key="B", qty_key="J", bl_key="F", pod_key="E", year_key="B",
             unique=[("B", "SI Number"), ("H", "Kontainer"), ("I", "Seal")],
             required={"B": "SI Number", "C": "Tgl", "E": "POD", "F": "BL", "H": "Kontainer", "I": "Seal"},
             columns=MASTER_PO_COLUMNS, line_required=(("qty", "Qty"), ("nw", "NW"), ("gw", "GW"), ("cbm", "CBM"), ("hs", "HS Code")),
@@ -1387,7 +1391,7 @@ def master_link_cache(master, profile=None):
 
 
 def fill_po_input2(sheet, lines):
-    for index in range(PROFILES["PO"].max_items):
+    for index in range(max(len(lines), 21)):
         r = FIRST_ITEM_ROW + index
         line = lines[index] if index < len(lines) else None
         cells = {}
@@ -1408,6 +1412,8 @@ def build_excel(template, output, di_key, master, lines, profile=None):
     source = zipfile.ZipFile(template)
     files = {i.filename: source.read(i.filename) for i in source.infolist() if not i.is_dir()}
     source.close()
+    # template punya baris item tetap (PO 20, DI 19); kalau item lebih banyak, baris CI/PL/SI/INPUT2 ditambah
+    add_item_rows(files, profile.name, len(lines))
     sheet = etree.fromstring(files["xl/worksheets/sheet1.xml"])
     number = di_key.split("柜")[-1]
     set_cell(sheet, "O2", int(number) if number.isdigit() else number)
@@ -1427,7 +1433,7 @@ def build_excel(template, output, di_key, master, lines, profile=None):
     sheet = etree.fromstring(files["xl/worksheets/sheet2.xml"])
     if profile.name == "PO":
         fill_po_input2(sheet, lines)
-    for index in range(MAX_ITEMS if profile.name == "DI" else 0):
+    for index in range(max(len(lines), MAX_ITEMS) if profile.name == "DI" else 0):
         r = FIRST_ITEM_ROW + index
         line = lines[index] if index < len(lines) else None
         cells = {}

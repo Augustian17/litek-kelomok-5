@@ -1,0 +1,24 @@
+DOCKIT UNTUK WINDOWS - VERSI SIAP PAKAI
+========================================
+
+Tidak perlu install Python. Cukup:
+
+1. Klik kanan file ZIP ini, pilih "Extract All" (ekstrak SEMUA isinya).
+2. Buka folder hasil ekstrak, lalu jalankan Dockit.exe.
+3. (Opsional) Klik kanan Dockit.exe > Send to > Desktop (create shortcut).
+
+Kebutuhan:
+- Windows 10 atau 11 (64-bit)
+- Microsoft Excel terpasang (dipakai untuk membaca file dan membuat PDF)
+
+Muncul layar biru "Windows protected your PC"?
+Aplikasi ini belum ditandatangani secara digital, jadi Windows memberi peringatan.
+Klik "More info", lalu "Run anyway".
+
+Template CI/PL
+Template di dalam folder _internal (po_template.xlsx dan di_template.xlsx)
+berisi DATA CONTOH FIKTIF. Untuk dipakai di kantor, ganti kedua file itu
+dengan template asli perusahaan (nama file harus sama).
+
+Pengaturan dan password tersimpan di %LOCALAPPDATA%, jadi tetap aman
+walaupun folder Dockit diganti dengan versi baru.

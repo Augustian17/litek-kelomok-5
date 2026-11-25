@@ -1,0 +1,78 @@
+name: Build Dockit untuk Windows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "packaging/**"
+      - ".github/workflows/build-windows.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pasang library
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller pywin32 customtkinter pypdfium2 pillow lxml tkinterdnd2 openpyxl
+
+      - name: Baca nomor versi
+        id: ver
+        shell: pwsh
+        run: |
+          $v = (Select-String -Path app/dockit.pyw -Pattern 'APP_VERSION = "([^"]+)"').Matches[0].Groups[1].Value
+          if (-not $v) { throw "APP_VERSION tidak ditemukan" }
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Build Dockit.exe
+        working-directory: app
+        run: >
+          pyinstaller dockit.pyw --name Dockit --noconfirm --windowed --icon dockit.ico
+          --add-data "di_template.xlsx;." --add-data "po_template.xlsx;."
+          --add-data "dockit.ico;." --add-data "dockit.png;." --add-data "icons;icons"
+          --collect-all customtkinter --collect-all tkinterdnd2 --collect-all pypdfium2
+          --hidden-import win32com.client --hidden-import pythoncom --hidden-import pywintypes
+
+      - name: Cek hasil build
+        shell: pwsh
+        run: |
+          foreach ($f in "app/dist/Dockit/Dockit.exe", "app/dist/Dockit/_internal/di_template.xlsx", "app/dist/Dockit/_internal/icons") {
+            if (-not (Test-Path $f)) { throw "Tidak ditemukan: $f" }
+          }
+
+      - name: Buat ZIP
+        shell: pwsh
+        run: |
+          Copy-Item packaging/BACA-DULU.txt app/dist/Dockit/
+          Compress-Archive -Path app/dist/Dockit -DestinationPath Dockit-Windows.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dockit-V${{ steps.ver.outputs.version }}-Windows
+          path: Dockit-Windows.zip
+
+      - name: Terbitkan di GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: Dockit V${{ steps.ver.outputs.version }}
+          make_latest: true
+          files: Dockit-Windows.zip
+          body: |
+            **Download:** `Dockit-Windows.zip` di bawah, ekstrak semua isinya, lalu jalankan `Dockit.exe`. Tidak perlu Python.
+
+            Kebutuhan: Windows 10/11 64-bit dan Microsoft Excel.
+            Kalau muncul "Windows protected your PC", klik **More info** lalu **Run anyway** (aplikasi belum ditandatangani).
+
+            Template CI/PL di dalamnya berisi data contoh fiktif. Untuk kantor, ganti file di folder `_internal` dengan template asli.
